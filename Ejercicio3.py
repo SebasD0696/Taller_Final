@@ -3,12 +3,9 @@ Desarrolla un sistema de reservas de vuelos que permita a los usuarios buscar vu
 seleccionar asientos y realizar reservas. Crea clases como "Vuelo", "Pasajero" y "Reserva" 
 para modelar el sistema y utiliza métodos para gestionar las reservas y los asientos disponibles."""
 
-"""def crear_listas(n):
-    listas = []
-    for i in range(n):
-        nueva_lista = []  # Crea una nueva lista vacía en cada iteración
-        listas.append(nueva_lista)
-        print(f"Lista {i + 1}: {nueva_lista}")"""
+"""Crear diccionarios anidados"""
+
+
 
 #--------------------------------- Diccionarios ----------------------------------------
 Vuelo_asientos = {}
@@ -17,6 +14,10 @@ libros_prestados = {}
 
 vuelo_lista_pasajeros = {}
 pasajeros = {}
+
+
+diccionario_1 = {}
+
 
 class sistema:
     def __init__(self):
@@ -71,12 +72,11 @@ class vuelo:
         Vuelo_asientos[self.nombre_vuelo] = self.asientos
         vuelo_destino[self.nombre_vuelo]  = self.destino
         
-        nueva_lista = []
-        for i in range(self.asientos):
-            if n <= i:
-                n = True
-            nueva_lista.append(n)
-        vuelo_lista_pasajeros[self.nombre_vuelo]  = nueva_lista 
+        nuevo_diccionario = {}
+        for i in range(1,self.asientos+1):
+            n = True
+            nuevo_diccionario[i] = n
+        diccionario_1[self.nombre_vuelo]  = nuevo_diccionario 
             
 #--------------------------------------------------------------------------------------------------
 
