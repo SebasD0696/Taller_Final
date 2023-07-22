@@ -9,7 +9,7 @@ Dinero_Recibido_Ventas = {}
 Producto_Vendido = {}
 
 class Inventario:
-    def _init_(self):
+    def __init__(self):
         self.menu()
 
     def menu(self):
@@ -49,7 +49,7 @@ class Inventario:
         Cantidad_Producto[nom] = cantidad
 
     def vender_producto(self):
-        producto_vender = Venta()
+        producto_vender = Venta(None,None,None)
         producto_vender.vender()
 
     def informe_ventas(self):
@@ -89,14 +89,14 @@ class Inventario:
                         Valor_Producto[key] = actualizar_valor 
 #------------------------------------ Clases producto y venta ---------------------------------------------
 class Producto:
-    def _init_(self,nombre,precio,stock):
+    def __init__(self,nombre,precio,stock):
         self.nombre = nombre
         self.precio = precio
         self.stock = stock
 
 class Venta(Producto):
-    def _init_(self, nombre, precio, stock):
-        super()._init_(nombre, precio, stock)
+    def __init__(self, nombre, precio, stock):
+        super().__init__(nombre, precio, stock)
 
     def vender(self):
         nom2 = input("INGRESE EL NOMBRE DEL PRODUCTO A VENDER: ")
@@ -121,4 +121,3 @@ class Venta(Producto):
             
 #----------------------------------------- Objetos de la clase inventario ------------------------------
 inventario1 = Inventario()
-inventario1.menu()

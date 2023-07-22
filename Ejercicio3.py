@@ -3,21 +3,12 @@ Desarrolla un sistema de reservas de vuelos que permita a los usuarios buscar vu
 seleccionar asientos y realizar reservas. Crea clases como "Vuelo", "Pasajero" y "Reserva" 
 para modelar el sistema y utiliza métodos para gestionar las reservas y los asientos disponibles."""
 
-"""Crear diccionarios anidados"""
-
-
-
 #--------------------------------- Diccionarios ----------------------------------------
 Vuelo_asientos = {}
 vuelo_destino = {}
-libros_prestados = {}
 
 vuelo_lista_pasajeros = {}
-pasajeros = {}
-
-
-diccionario_1 = {}
-
+asientos_ocupados = {}
 
 class sistema:
     def __init__(self):
@@ -28,28 +19,24 @@ class sistema:
             print("\n--- Menú de Inventario ---")
             print("1. Crear vuelo")
             print("2. Buscar vuelos")
-            print("3. Asientos disponibles")
-            print("4. Generar informe de libros prestados")
-            print("5. Buscar libros por genero")
+            print("3. Realizar reserva")
+            print("4. Observar reservas realizadas ")
             print("0. Salir")
 
             opcion = input("Seleccione una opción: ")
 
             if opcion == "1":
-                vuelo_nuevo = vuelo()
+                vuelo_nuevo = vuelo(None,None,None)
                 vuelo_nuevo.crear_vuelo()
             elif opcion == "2":
-                vuelo_nuevo = vuelo()
+                vuelo_nuevo = vuelo(None,None,None)
                 vuelo_nuevo.buscar_vuelo_destino()
             elif opcion == "3":
-                reserva_nuevo = reserva()
-                reserva_nuevo.asientos_disponibles()
+                reserva_nuevo = reserva(None)
+                reserva_nuevo.hacer_reserva()
             elif opcion == "4":
-                pass
-                #self.informe_libros_prestados()
-            elif opcion == "5":
-                pass
-                #self.buscar_libros_genero()
+                reserva_nuevo = reserva(None)
+                reserva_nuevo.observar_reservas()
             elif opcion == "0":
                 print("SALIENDO DEL PROGRAMA.....")
                 break
@@ -58,7 +45,7 @@ class sistema:
 
 #------------------------------------ Clases vuelo y pasajero ---------------------------------------------
 class vuelo:
-    def _init_(self,nombre_vuelo,destino,asientos):
+    def __init__(self,nombre_vuelo,destino,asientos):
         self.nombre_autor = nombre_vuelo
         self.destino = destino
         self.asientos = asientos
@@ -71,12 +58,7 @@ class vuelo:
 
         Vuelo_asientos[self.nombre_vuelo] = self.asientos
         vuelo_destino[self.nombre_vuelo]  = self.destino
-        
-        nuevo_diccionario = {}
-        for i in range(1,self.asientos+1):
-            n = True
-            nuevo_diccionario[i] = n
-        diccionario_1[self.nombre_vuelo]  = nuevo_diccionario 
+        asientos_ocupados[self.nombre_vuelo] = []
             
 #--------------------------------------------------------------------------------------------------
 
@@ -93,41 +75,56 @@ class vuelo:
                     print(f"- {key}")
 
 class pasajero:
-    def _init_(self,nombre_pasajero):
+    def __init__(self,nombre_pasajero):
         self.nombre_pasajero = nombre_pasajero
 
 class reserva(pasajero):
-    def _init_(self, nombre_pasajero):
-        super()._init_(nombre_pasajero)
+    def __init__(self, nombre_pasajero):
+        super().__init__(nombre_pasajero)
 
-    def asientos_disponibles(self):
+    def hacer_reserva(self):
+            vuelo_nom = input("DIGITE EL NOMBRE DEL VUELO: ")
+            if vuelo_nom not in Vuelo_asientos:
+                print("La aerolinea no posee vuelos con dicho nombre.")
+            else:
+                asientos_disponibles = set(range(1, Vuelo_asientos[vuelo_nom] + 1))
+                asientos_reservados = asientos_ocupados[vuelo_nom]  
+
+                for asiento in asientos_reservados:
+                    asientos_disponibles.remove(asiento)
+
+                if not asientos_disponibles:
+                    print("Lo sentimos, no hay asientos disponibles para este vuelo.")
+                    return
+                
+                print("======================================================")
+                print(f" Asientos disponibles para el vuelo: {vuelo_nom} ")
+                print("======================================================")
+                for i in asientos_disponibles:
+                    print(f"- Asiento: {i}")
+
+                asiento_seleccionado = int(input("Seleccione un asiento disponible: "))
+
+                if asiento_seleccionado not in asientos_disponibles:
+                    print("El asiento seleccionado no está disponible.")
+                else:
+                    asientos_ocupados[vuelo_nom].append(asiento_seleccionado)
+                    vuelo_lista_pasajeros.setdefault(vuelo_nom, []).append(asiento_seleccionado - 1) 
+
+                    print(f"¡Reserva exitosa! Asiento {asiento_seleccionado} reservado para el vuelo {vuelo_nom}.")
+
+    def observar_reservas(self):
         vuelo_nom = input("DIGITE EL NOMBRE DEL VUELO: ")
         if vuelo_nom not in Vuelo_asientos:
             print("La aerolinea no posee vuelos con dicho nombre.")
+        elif vuelo_nom not in vuelo_lista_pasajeros:
+            print("No se han realizado reservas para este vuelo.")
         else:
-            print("======================================================")
-            print(f" Asientos disponibles para el vuelo: {vuelo_nom} ")
-            print("======================================================")
-            for key,value in vuelo_lista_pasajeros.items():
-                if key == vuelo_nom:
-                    for i in value:
-                        print(f" - Asiento: {i+1} ")
-                    print("")
-                    decision = int(input("SELECCIONE EL ASIENTO: "))
-                    
-                    if decision in value:
-                        for i in value:
-                            if decision == i+1:
-                                self.nombre_pasajero = input("DIGITE El NOMBRE DEL PASAJERO")
-                                value.remove(decision-1)
-                                
-                                pasajeros[self.nombre_pasajero] = decision
-                                print(f"El pasajero: {self.nombre_pasajero} reservo el asiento {decision}")
-                    else:
-                        print("EL ASIENTO NO EXISTE O NO ESTA DISPONIBLE")
-        
-    def hacer_reserva(self):
-        pass        
-#----------------------------------------- Objetos de la clase biblioteca ------------------------------
+            print("=======================================")
+            print(f" Reservas para el vuelo: {vuelo_nom} ")
+            print("=======================================")
+            for asiento in vuelo_lista_pasajeros[vuelo_nom]:
+                print(f" - Asiento: {asiento + 1} reservado")
+
+#----------------------------------------- Objetos de la clase Sistema ------------------------------
 sistema1 = sistema()
-sistema1.menu()

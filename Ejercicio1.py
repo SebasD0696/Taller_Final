@@ -10,7 +10,7 @@ libros_prestados = {}
 usuarios = {}
 
 class Biblioteca:
-    def _init_(self):
+    def __init__(self):
         self.menu()
 
     def menu(self):
@@ -42,7 +42,7 @@ class Biblioteca:
                 print("Opción inválida. Intente nuevamente.")
 
     def agregar_libro(self):
-        Libro_agregar = Libro()
+        Libro_agregar = Libro(None,None,None)
         Libro_agregar.agregar_libro()
 
     def buscar_libros_autor(self):
@@ -61,7 +61,7 @@ class Biblioteca:
         usuario = input("INGRESE EL NOMBRE DEL USUARIO: ")
         nom2 = input("INGRESE EL NOMBRE DEL LIBRO: ")
         if nom2 not in autor_libro:
-            print("El autor ingresado no tiene libros en nuestra biblioteca.")
+            print("El libro ingresado no se encuentra en la biblioteca.")
         else:
             for key,value in libros_prestados.items():
                 if key == nom2:
@@ -94,12 +94,12 @@ class Biblioteca:
                     print(f"- {key}")
 #------------------------------------ Clases autor y libro ---------------------------------------------
 class Autor:
-    def _init_(self,nombre_autor):
+    def __init__(self,nombre_autor):
         self.nombre_autor = nombre_autor
 
 class Libro(Autor):
-    def _init_(self, nombre_autor, nombre_libro, genero):
-        super()._init_(nombre_autor)
+    def __init__(self, nombre_autor, nombre_libro, genero):
+        super().__init__(nombre_autor)
         self.nombre_libro = nombre_libro
         self.genero = genero
     
@@ -114,4 +114,4 @@ class Libro(Autor):
         
 #----------------------------------------- Objetos de la clase biblioteca ------------------------------
 Biblioteca1 = Biblioteca()
-Biblioteca1.menu()
+
